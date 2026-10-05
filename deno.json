@@ -1,0 +1,17 @@
+{
+  "minimumDependencyAge": "P3D",
+  "nodeModulesDir": "auto",
+  "unstable": ["fmt-component"],
+  "exclude": [".vscode", ".quasar", "dist"],
+  "permissions": {
+    "default": {
+      "net": true
+    }
+  },
+  "lint": {
+    "exclude": ["/**/*.d.ts"]
+  },
+  "fmt": {
+    "lineWidth": 100
+  }
+}

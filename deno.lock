@@ -5,6 +5,7 @@
     "npm:@quasar/extras@^2.1.0": "2.1.0",
     "npm:@types/node@^22.19.11": "22.20.5",
     "npm:autoprefixer@^10.4.27": "10.6.1_postcss@8.5.28",
+    "npm:pinia-plugin-persistedstate@^4.7.1": "4.7.1_pinia@4.0.3",
     "npm:pinia@^4.0.2": "4.0.3_@vue+devtools-api@8.2.1_typescript@6.0.3_vue@3.5.43",
     "npm:postcss@^8.5.8": "8.5.28",
     "npm:quasar@^2.34.0": "2.34.0",
@@ -769,6 +770,9 @@
     "define-lazy-prop@3.0.0": {
       "integrity": "sha512-N+MeXYoqr3pOgn8xfyRPREN7gHakLYjhsHhWGT3fWAiL4IkAt0iDw14QiiEm2bE30c5XX5q0FtAA3CK5f9/BUg=="
     },
+    "defu@6.1.7": {
+      "integrity": "sha512-7z22QmUWiQ/2d0KkdYmANbRUVABpZ9SNYyH5vx6PZ+nE5bcC0l7uFvEfHlyld/HcGBFTL536ClDt3DEcSlEJAQ=="
+    },
     "depd@2.0.0": {
       "integrity": "sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw=="
     },
@@ -1176,6 +1180,16 @@
     },
     "picomatch@4.0.7": {
       "integrity": "sha512-qcJu88Q2IWqJsDD529JKMdwGm/dvInW4HvQnRwiH9JtihJvzGOscDtHE3x1pBKeUOTysQ8kVmLnJ2kJu7yhcGA=="
+    },
+    "pinia-plugin-persistedstate@4.7.1_pinia@4.0.3": {
+      "integrity": "sha512-WHOqh2esDlR3eAaknPbqXrkkj0D24h8shrDPqysgCFR6ghqP/fpFfJmMPJp0gETHsvrh9YNNg6dQfo2OEtDnIQ==",
+      "dependencies": [
+        "defu",
+        "pinia"
+      ],
+      "optionalPeers": [
+        "pinia"
+      ]
     },
     "pinia@4.0.3_@vue+devtools-api@8.2.1_typescript@6.0.3_vue@3.5.43": {
       "integrity": "sha512-XMQqpvjgG7LMqVhhFUzKLT4KEbsYbfZZ0CZU9PgdFm1O2VKBmIkykL8+SfNhOaT7sR0wT6BEgKT0YNDYWgmVRA==",
@@ -1738,6 +1752,7 @@
         "npm:@quasar/extras@^2.1.0",
         "npm:@types/node@^22.19.11",
         "npm:autoprefixer@^10.4.27",
+        "npm:pinia-plugin-persistedstate@^4.7.1",
         "npm:pinia@^4.0.2",
         "npm:postcss@^8.5.8",
         "npm:quasar@^2.34.0",
