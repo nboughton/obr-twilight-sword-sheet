@@ -1,0 +1,68 @@
+<template>
+  <div class="row q-mb-sm q-px-sm full-width justify-between">
+    <q-btn-group class="shadow-1" rounded>
+      <q-btn :label="store.char.hearts.max" @click="editValue('hearts', 'max')" />
+      <q-separator vertical />
+      <q-btn disable>
+        <svg-icon colour-empty="grey" colour-filled="red"
+          :path="mdiHeart"
+          :fill-pc="store.char.hearts.cur / store.char.hearts.max" />
+      </q-btn>
+      <q-separator vertical />
+      <q-btn :label="store.char.hearts.cur" @click="editValue('hearts', 'cur')" />
+    </q-btn-group>
+
+    <q-btn-group class="shadow-1" rounded>
+      <q-btn disable>
+        <svg-icon :path="mdiShield" />
+      </q-btn>
+      <q-separator vertical />
+      <q-btn disable>{{ armour != 0 ? armour.value : 0 }}</q-btn>
+    </q-btn-group>
+
+    <q-btn-group class="shadow-1" rounded>
+      <q-btn :label="store.char.stamina.max" @click="editValue('stamina', 'max')" />
+      <q-separator vertical />
+      <q-btn disable>
+        <svg-icon colour-empty="grey" colour-filled="blue"
+          :path="mdiArmFlex"
+          :fill-pc="store.char.stamina.cur / store.char.stamina.max" />
+      </q-btn>
+      <q-separator vertical />
+
+      <q-btn :label="store.char.stamina.cur" @click="editValue('stamina', 'cur')" />
+    </q-btn-group>
+  </div>
+</template>
+
+<script setup lang="ts">
+import SvgIcon from "./SvgIcon.vue";
+
+import { Armour } from "./models.js";
+import { mdiArmFlex, mdiHeart, mdiShield } from "@mdi/js";
+
+import { useQuasar } from "quasar";
+import { useCharacterStore } from "@/stores/character-store";
+
+const store = useCharacterStore();
+
+const armour =
+  store.char.inventory.filter((i) => i.class == "armour").find((i) => (i as Armour).equipped) as
+    | Armour
+    | undefined ?? 0;
+
+const $q = useQuasar();
+const editValue = (v: "hearts" | "stamina", m: "max" | "cur") =>
+  $q.dialog({
+    title: `Edit ${m == "cur" ? "current" : m} ${v}`,
+    cancel: true,
+    ok: true,
+    prompt: {
+      label: `${v}`,
+      model: `${store.char[v][m]}`,
+      type: "number",
+      max: m == "cur" ? store.char[v].max : 100,
+      min: 0,
+    },
+  }).onOk((val) => store.char[v][m] = val);
+</script>

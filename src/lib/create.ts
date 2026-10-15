@@ -13,28 +13,28 @@ export const create = {
     boon: false,
     hope: 1,
     hearts: { max: 0, cur: 0 },
-    stamina: { max: 0, cur: 0 },
+    stamina: { max: 3, cur: 3 },
     abilities: {
-      "Strength": 0,
-      "Agility": 0,
-      "Vitality": 0,
-      "Perception": 0,
-      "Will": 0,
-      "Knowledge": 0,
-      "Charisma": 0,
-      "Stealth": 0,
+      Strength: 0,
+      Agility: 0,
+      Vitality: 0,
+      Perception: 0,
+      Will: 0,
+      Knowledge: 0,
+      Charisma: 0,
+      Stealth: 0,
     },
     statuses: {
-      "POISON": false,
-      "STUN": false,
-      "CONFUSION": false,
-      "WOUND": false,
-      "FEAR": false,
-      "FREEZE": false,
-      "BLIND": false,
-      "SILENCE": false,
-      "BURN": false,
-      "K.O.": false,
+      POISON: false,
+      STUN: false,
+      CONFUSION: false,
+      WOUND: false,
+      FEAR: false,
+      FREEZE: false,
+      BLIND: false,
+      SILENCE: false,
+      BURN: false,
+      KO: false,
     },
     zin: {
       green: 0,
@@ -45,8 +45,8 @@ export const create = {
     feats: [],
   }),
 
-  item: (itemClass: ItemClass): Item | Weapon | Armour => {
-    const item: Item = {
+  item: (itemClass: ItemClass): Item => {
+    const item = {
       id: uid(),
       name: "",
       class: itemClass,
@@ -56,20 +56,26 @@ export const create = {
 
     switch (itemClass) {
       case "weapon":
-        return Object.assign(item, {
+        return {
+          ...item,
           type: "M",
           equipped: false,
           tags: [],
+          range: "Close",
           damage: "1d8",
-        }) as Weapon;
+        } as Weapon;
+
       case "armour":
-        return Object.assign(item, {
+        return {
+          ...item,
           type: "Clothing",
           penalty: [],
           value: 0,
-        }) as Armour;
+          equipped: false,
+        } as Armour;
+
       default:
-        return item;
+        return item as Item;
     }
   },
 

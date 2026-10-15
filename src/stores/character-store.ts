@@ -7,6 +7,7 @@ export const useCharacterStore = defineStore("character", {
     characters: [],
     config: {
       char: 0,
+      durability: false,
     },
   } as CharacterStore),
 
@@ -15,7 +16,7 @@ export const useCharacterStore = defineStore("character", {
   },
 
   actions: {
-    new() {
+    newChar() {
       this.characters.push(create.character());
       this.config.char = this.characters.length - 1;
     },

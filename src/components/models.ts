@@ -2,24 +2,25 @@ export interface CharacterStore {
   characters: Character[];
   config: {
     char: number;
+    durability: boolean;
   };
 }
 
 export type Dice = `${number}${"d" | "D"}${2 | 3 | 4 | 6 | 8 | 10 | 12 | 20}`;
 
 export const isDice = (v: unknown): v is Dice => {
-  return typeof v == "string" && /^\d+(d|D)(2|3|4|6|8|10|12|20)$/.test(v);
+  return typeof v == "string" && /^\d+[dD](2|3|4|6|8|10|12|20)$/.test(v);
 };
 
 export const elements = {
-  "Fire": "Fire",
-  "Ice": "Ice",
-  "Wind": "Wind",
-  "Earth": "Earth",
-  "Thunder": "Thunder",
-  "Water": "Water",
-  "Darkness": "Darkness",
-  "Light": "Light",
+  Fire: "Fire",
+  Ice: "Ice",
+  Wind: "Wind",
+  Earth: "Earth",
+  Thunder: "Thunder",
+  Water: "Water",
+  Darkness: "Darkness",
+  Light: "Light",
 } as const;
 
 export type Element = keyof typeof elements;
@@ -30,14 +31,14 @@ export interface Affinity {
 }
 
 export const elAffinities: Record<Element, Affinity> = {
-  "Fire": { weak: "Water", resist: "Ice" },
-  "Ice": { weak: "Fire", resist: "Wind" },
-  "Wind": { weak: "Ice", resist: "Earth" },
-  "Earth": { weak: "Wind", resist: "Thunder" },
-  "Thunder": { weak: "Earth", resist: "Water" },
-  "Water": { weak: "Thunder", resist: "Fire" },
-  "Darkness": { weak: "Light" },
-  "Light": { weak: "Darkness" },
+  Fire: { weak: "Water", resist: "Ice" },
+  Ice: { weak: "Fire", resist: "Wind" },
+  Wind: { weak: "Ice", resist: "Earth" },
+  Earth: { weak: "Wind", resist: "Thunder" },
+  Thunder: { weak: "Earth", resist: "Water" },
+  Water: { weak: "Thunder", resist: "Fire" },
+  Darkness: { weak: "Light" },
+  Light: { weak: "Darkness" },
 };
 
 export interface Character {
@@ -67,36 +68,48 @@ export interface Character {
 }
 
 export const abilities = {
-  "STR": "Strength",
-  "AGL": "Agility",
-  "VIT": "Vitality",
-  "PER": "Perception",
-  "WIL": "Will",
-  "KNO": "Knowledge",
-  "CHA": "Charisma",
-  "STE": "Stealth",
+  STR: "Strength",
+  AGL: "Agility",
+  VIT: "Vitality",
+  PER: "Perception",
+  WIL: "Will",
+  KNO: "Knowledge",
+  CHA: "Charisma",
+  STE: "Stealth",
 } as const;
 
 export type AblShort = keyof typeof abilities;
 export type AblLong = (typeof abilities)[keyof typeof abilities];
 
 export const statuses = {
-  "POISON":
-    "At the beginning of your Turn, make a Vitality roll. If you fail, you take 1D4 damage.",
-  "STUN":
+  POISON: "At the beginning of your Turn, make a Vitality roll. If you fail, you take 1D4 damage.",
+  STUN:
     "At the beginning of your Turn, make a Vitality roll. If you fail you are paralyzed and skip your Turn.",
-  "CONFUSION": "You have Disadvantage on KNO and STE.",
-  "WOUND": "You have Disadvantage on STR and AGL.",
-  "FEAR": "You have Disadvantage on WIL and CHA.",
-  "FREEZE": "You can’t take reactions, and you need to dash to move.",
-  "BLIND": "You have Disadvantage on PER and to all rolls to attack or dodge.",
-  "SILENCE": "You can’t speak, and you can’t cast spells.",
-  "BURN": "At the beginning of your Turn, take 1 damage.",
-  "K.O.":
-    "You can’t act or walk by yourself, you can’t use feats or spells, and you automatically fail every roll.",
+  CONFUSION: "You have Disadvantage on KNO and STE.",
+  WOUND: "You have Disadvantage on STR and AGL.",
+  FEAR: "You have Disadvantage on WIL and CHA.",
+  FREEZE: "You can't take reactions, and you need to dash to move.",
+  BLIND: "You have Disadvantage on PER and to all rolls to attack or dodge.",
+  SILENCE: "You can't speak, and you can't cast spells.",
+  BURN: "At the beginning of your Turn, take 1 damage.",
+  KO:
+    "You can't act or walk by yourself, you can't use feats or spells, and you automatically fail every roll.",
 } as const;
 
 export type Status = keyof typeof statuses;
+
+export const StatusIcon: Record<Status, { icon: string; colour: string }> = {
+  POISON: { icon: "mdi-chart-bubble", colour: "green-9" },
+  STUN: { icon: "mdi-flash", colour: "yellow-9" },
+  CONFUSION: { icon: "mdi-head-question", colour: "blue-9" },
+  WOUND: { icon: "mdi-liquid-spot", colour: "red" },
+  FEAR: { icon: "mdi-head-alert", colour: "purple-5" },
+  FREEZE: { icon: "mdi-snowflake", colour: "blue-5" },
+  BLIND: { icon: "mdi-eye-off", colour: "green-5" },
+  SILENCE: { icon: "mdi-chat-processing", colour: "pink" },
+  BURN: { icon: "mdi-fire", colour: "orange" },
+  KO: { icon: "mdi-skull", colour: "purple-9" },
+} as const;
 
 export const ranges = {
   "Self": "Self",
@@ -107,6 +120,8 @@ export const ranges = {
 
 export type Range = keyof typeof ranges;
 
+export type Item = InvItem | Weapon | Armour;
+
 export const itemClasses = {
   "item": "item",
   "weapon": "weapon",
@@ -115,12 +130,16 @@ export const itemClasses = {
 
 export type ItemClass = keyof typeof itemClasses;
 
-export interface Item {
+export interface ItemBase {
   id: string;
   name: string;
   class: ItemClass;
   desc: string;
   slot: number;
+}
+
+export interface InvItem extends ItemBase {
+  class: "item";
 }
 
 export const wpnTags = {
@@ -146,14 +165,24 @@ export const wpnTags = {
 
 export type WpnTag = keyof typeof wpnTags;
 
-export interface Weapon extends Item {
+export type DmgMod = `+${Dice | number}`;
+
+export type Dmg = `${Dice}${DmgMod | ""}`;
+
+export const isDmgStr = (v: unknown): boolean => {
+  return typeof v == "string" &&
+    /^\d+[dD](2|3|4|6|8|10|12|20)(?:|\+\d+(|[dD](2|3|4|6|8|10|12|20)))$/.test(v);
+};
+
+export interface Weapon extends ItemBase {
   class: "weapon";
   type: "M" | "R" | "S";
   equipped: boolean;
   tags: WpnTag[];
+  range: Range;
   element?: Element;
   durability?: number;
-  damage: Dice;
+  damage: Dmg;
 }
 
 export const armourTypes = {
@@ -165,10 +194,11 @@ export const armourTypes = {
 
 export type ArmourType = keyof typeof armourTypes;
 
-export interface Armour extends Item {
+export interface Armour extends ItemBase {
   class: "armour";
   type: ArmourType;
   penalty: AblShort[];
+  equipped: boolean;
   // Can probably just put these in the .desc field
   // resist: (Element | "HOT 1" | "HOT 2" | "COLD 1" | "COLD 2")[];
   // immune: Element[];
