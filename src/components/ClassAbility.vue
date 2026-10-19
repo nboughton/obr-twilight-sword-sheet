@@ -21,7 +21,7 @@
     <div class="row">
       <span class="col text-bold">{{ feat.name }}</span>
       <span class="col-shrink"
-        v-if="feat.type == 'spell'">Roll {{ feat.roll }} ({{ feat.roll != "-" ? store.char.abilities[long(feat.roll)] : "-" }})</span>
+        v-if="feat.type == 'spell'">Roll {{ feat.roll }} ({{ feat.roll != "-" ? app.char.abilities[long(feat.roll)] : "-" }})</span>
     </div>
     <div class="row items-center" v-if="feat.type == 'spell'">
       <span class="col items-center">
@@ -46,5 +46,5 @@ const feat = defineModel<ClassAbility>({ required: true });
 const props = defineProps<{ edit?: boolean }>();
 const emit = defineEmits(["delete"]);
 
-const store = useCharacterStore();
+const app = useCharacterStore();
 </script>

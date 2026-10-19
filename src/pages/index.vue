@@ -1,6 +1,6 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-header elevated>
+    <q-header unelevated>
       <q-toolbar>
         <q-btn
           flat
@@ -52,12 +52,21 @@
         </q-item>
         <q-separator />
 
-        <q-item clickable v-ripple>
+        <!--q-item clickable v-ripple>
           <q-item-section avatar>
             <q-icon name="mdi-cog" />
           </q-item-section>
           <q-item-section>
             <q-toggle left-label label="Dark Mode" v-model="app.config.dark" />
+          </q-item-section>
+        </q-item-->
+
+        <q-item clickable v-ripple>
+          <q-item-section avatar>
+            <q-icon name="mdi-cog" />
+          </q-item-section>
+          <q-item-section>
+            <q-toggle left-label label="Durability" v-model="app.config.durability" />
           </q-item-section>
         </q-item>
       </q-list>

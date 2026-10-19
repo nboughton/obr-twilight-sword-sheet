@@ -1,5 +1,5 @@
 <template>
-  <q-page class="column full-width" padding>
+  <q-page class="column full-width bg-white" padding>
     <bio />
     <top-bar />
     <q-tabs v-model="tab" dense>
@@ -47,11 +47,11 @@ import { useCharacterStore } from "@/stores/character-store";
 import { Status, statuses, StatusIcon } from "@/components/models";
 
 const tab = ref("attr");
-const store = useCharacterStore();
+const app = useCharacterStore();
 const conditions = computed((): { text: string; icon: string }[] => {
   const r: { text: string; icon: string }[] = [];
-  for (let cond in store.char.statuses) {
-    if (store.char.statuses[cond as Status]) {
+  for (let cond in app.char.statuses) {
+    if (app.char.statuses[cond as Status]) {
       r.push({ text: statuses[cond as Status], icon: StatusIcon[cond as Status].icon });
     }
   }

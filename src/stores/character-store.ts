@@ -9,7 +9,7 @@ export const useCharacterStore = defineStore("character", {
     config: {
       char: 0,
       durability: false,
-      dark: true,
+      dark: false,
     },
   } as CharacterStore),
 

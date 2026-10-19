@@ -6,7 +6,7 @@
   "homepage_url": "https://github.com/nboughton/obr-twilight-sword-sheet",
   "action": {
     "title": "Twilight Sword Sheet",
-    "icon": "/apps/obr-twilight-sword-sheet/icon.svg",
+    "icon": "/apps/obr-twilight-sword-sheet/sword.svg",
     "popover": "/apps/obr-twilight-sword-sheet/",
     "height": 800,
     "width": 450

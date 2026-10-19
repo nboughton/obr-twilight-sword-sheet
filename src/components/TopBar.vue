@@ -1,15 +1,15 @@
 <template>
   <div class="row q-mb-sm q-px-sm full-width justify-between">
     <q-btn-group class="bg-grey-3 text-black" rounded outline>
-      <q-btn :label="store.char.hearts.max" @click="editValue('hearts', 'max')" />
+      <q-btn :label="app.char.hearts.max" @click="editValue('hearts', 'max')" />
       <q-separator vertical />
       <q-btn disable>
         <svg-icon colour-empty="grey" colour-filled="red"
           :path="mdiHeart"
-          :fill-pc="store.char.hearts.cur / store.char.hearts.max" />
+          :fill-pc="app.char.hearts.cur / app.char.hearts.max" />
       </q-btn>
       <q-separator vertical />
-      <q-btn :label="store.char.hearts.cur" @click="editValue('hearts', 'cur')" />
+      <q-btn :label="app.char.hearts.cur" @click="editValue('hearts', 'cur')" />
     </q-btn-group>
 
     <q-btn-group class="bg-grey-3 text-black" rounded outline>
@@ -21,16 +21,16 @@
     </q-btn-group>
 
     <q-btn-group class="bg-grey-3 text-black" rounded outline>
-      <q-btn :label="store.char.stamina.max" @click="editValue('stamina', 'max')" />
+      <q-btn :label="app.char.stamina.max" @click="editValue('stamina', 'max')" />
       <q-separator vertical />
       <q-btn disable>
         <svg-icon colour-empty="grey" colour-filled="blue"
           :path="mdiArmFlex"
-          :fill-pc="store.char.stamina.cur / store.char.stamina.max" />
+          :fill-pc="app.char.stamina.cur / app.char.stamina.max" />
       </q-btn>
       <q-separator vertical />
 
-      <q-btn :label="store.char.stamina.cur" @click="editValue('stamina', 'cur')" />
+      <q-btn :label="app.char.stamina.cur" @click="editValue('stamina', 'cur')" />
     </q-btn-group>
   </div>
 </template>
@@ -46,10 +46,10 @@ import { useCharacterStore } from "@/stores/character-store";
 
 import SvgIcon from "./SvgIcon.vue";
 
-const store = useCharacterStore();
+const app = useCharacterStore();
 
 const armour = computed(() =>
-  store.char.inventory.filter((i) => i.class == "armour").find((i) => (i as Armour).equipped) as
+  app.char.inventory.filter((i) => i.class == "armour").find((i) => (i as Armour).equipped) as
     | Armour
     | undefined ?? 0
 );
@@ -62,10 +62,10 @@ const editValue = (v: "hearts" | "stamina", m: "max" | "cur") =>
     ok: true,
     prompt: {
       label: `${v}`,
-      model: `${store.char[v][m]}`,
+      model: `${app.char[v][m]}`,
       type: "number",
-      max: m == "cur" ? store.char[v].max : 100,
+      max: m == "cur" ? app.char[v].max : 100,
       min: 0,
     },
-  }).onOk((val) => store.char[v][m] = val);
+  }).onOk((val) => app.char[v][m] = val);
 </script>
