@@ -1,12 +1,11 @@
 <template>
-  <div class="column q-px-sm">
-    <q-btn-group class="q-my-xs shadow-1" v-for="(val, name) in store.char.abilities" :key="name"
-      rounded
-      spread>
-      <q-btn :label="name" disable />
+  <q-btn-group class="column full-width" vertical rounded flat>
+    <q-btn-group :class="`${disadvantage(short(name)) ? 'bg-red text-white' : ''} q-my-xs `"
+      v-for="(val, name) in store.char.abilities" :key="name" rounded spread>
+      <q-btn :label="short(name)" disable />
       <q-btn :label="val" @click="edit(name)" />
     </q-btn-group>
-  </div>
+  </q-btn-group>
 </template>
 
 <script setup lang="ts">
@@ -14,13 +13,37 @@ import { useQuasar } from "quasar";
 import { abilities, AblLong, AblShort } from "./models";
 
 import { useCharacterStore } from "@/stores/character-store";
+import { short } from "@/lib/misc";
 
 const store = useCharacterStore();
-const short = (v: AblLong): AblShort => {
-  for (let key of Object.keys(abilities) as (keyof typeof abilities)[]) {
-    if (abilities[key] == v) return key;
+
+const disadvantage = (abl: AblShort): boolean => {
+  if (store.armour?.penalty.includes(abl)) return true;
+
+  switch (abl) {
+    case "STR":
+      if (store.char.statuses.WOUND) return true;
+      break;
+    case "AGL":
+      if (store.char.statuses.WOUND) return true;
+      break;
+    case "PER":
+      if (store.char.statuses.BLIND) return true;
+      break;
+    case "WIL":
+      if (store.char.statuses.FEAR) return true;
+      break;
+    case "KNO":
+      if (store.char.statuses.CONFUSION) return true;
+      break;
+    case "CHA":
+      if (store.char.statuses.FEAR) return true;
+      break;
+    case "STE":
+      if (store.char.statuses.CONFUSION) return true;
+      break;
   }
-  return "STR";
+  return false;
 };
 
 const $q = useQuasar();

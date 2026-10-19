@@ -3,16 +3,26 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, watch } from "vue";
 import { useCharacterStore } from "./stores/character-store";
+import { useQuasar } from "quasar";
 
 const ready = ref(false);
 
-const store = useCharacterStore();
+const $q = useQuasar();
+const app = useCharacterStore();
+
 onBeforeMount(() => {
-  if (store.characters.length == 0) {
-    store.newChar();
+  $q.dark.set(app.config.dark);
+
+  if (app.characters.length == 0) {
+    app.newChar();
   }
   ready.value = true;
 });
+
+watch(
+  () => app.config.dark,
+  () => $q.dark.set(app.config.dark),
+);
 </script>

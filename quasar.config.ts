@@ -50,7 +50,7 @@ export default defineConfig((/* ctx */) => {
       vueRouterMode: "hash", // available values: 'hash', 'history'
       // vueRouterBase,
 
-      // publicPath: '/',
+      publicPath: "/apps/obr-twilight-sword-sheet/",
       // define: {},
       // defineEnv: {}
       // ignorePublicFolder: true,

@@ -1,6 +1,6 @@
 <template>
   <div class="row q-mb-sm q-px-sm full-width justify-between">
-    <q-btn-group class="shadow-1" rounded>
+    <q-btn-group class="bg-grey-3 text-black" rounded outline>
       <q-btn :label="store.char.hearts.max" @click="editValue('hearts', 'max')" />
       <q-separator vertical />
       <q-btn disable>
@@ -12,7 +12,7 @@
       <q-btn :label="store.char.hearts.cur" @click="editValue('hearts', 'cur')" />
     </q-btn-group>
 
-    <q-btn-group class="shadow-1" rounded>
+    <q-btn-group class="bg-grey-3 text-black" rounded outline>
       <q-btn disable>
         <svg-icon :path="mdiShield" />
       </q-btn>
@@ -20,7 +20,7 @@
       <q-btn disable>{{ armour != 0 ? armour.value : 0 }}</q-btn>
     </q-btn-group>
 
-    <q-btn-group class="shadow-1" rounded>
+    <q-btn-group class="bg-grey-3 text-black" rounded outline>
       <q-btn :label="store.char.stamina.max" @click="editValue('stamina', 'max')" />
       <q-separator vertical />
       <q-btn disable>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import SvgIcon from "./SvgIcon.vue";
+import { computed } from "vue";
 
 import { Armour } from "./models.js";
 import { mdiArmFlex, mdiHeart, mdiShield } from "@mdi/js";
@@ -44,12 +44,15 @@ import { mdiArmFlex, mdiHeart, mdiShield } from "@mdi/js";
 import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
 
+import SvgIcon from "./SvgIcon.vue";
+
 const store = useCharacterStore();
 
-const armour =
+const armour = computed(() =>
   store.char.inventory.filter((i) => i.class == "armour").find((i) => (i as Armour).equipped) as
     | Armour
-    | undefined ?? 0;
+    | undefined ?? 0
+);
 
 const $q = useQuasar();
 const editValue = (v: "hearts" | "stamina", m: "max" | "cur") =>

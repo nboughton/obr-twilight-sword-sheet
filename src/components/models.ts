@@ -3,6 +3,7 @@ export interface CharacterStore {
   config: {
     char: number;
     durability: boolean;
+    dark: boolean;
   };
 }
 
@@ -41,6 +42,17 @@ export const elAffinities: Record<Element, Affinity> = {
   Light: { weak: "Darkness" },
 };
 
+export const elIcon: Record<Element, { icon: string; colour: string }> = {
+  Fire: { icon: "mdi-fire", colour: "red" },
+  Ice: { icon: "mdi-snowflake", colour: "blue" },
+  Wind: { icon: "mdi-weather-windy", colour: "green" },
+  Earth: { icon: "mdi-grass", colour: "brown" },
+  Thunder: { icon: "mdi-flash", colour: "yellow" },
+  Water: { icon: "mdi-water", colour: "blue" },
+  Darkness: { icon: "mdi-moon-waxing-crescent", colour: "grey" },
+  Light: { icon: "mdi-brightness-7", colour: "yellow" },
+};
+
 export interface Character {
   id: string;
   bio: {
@@ -64,7 +76,7 @@ export interface Character {
   };
 
   inventory: Item[];
-  feats: Feat[];
+  feats: ClassAbility[];
 }
 
 export const abilities = {
@@ -82,18 +94,16 @@ export type AblShort = keyof typeof abilities;
 export type AblLong = (typeof abilities)[keyof typeof abilities];
 
 export const statuses = {
-  POISON: "At the beginning of your Turn, make a Vitality roll. If you fail, you take 1D4 damage.",
-  STUN:
-    "At the beginning of your Turn, make a Vitality roll. If you fail you are paralyzed and skip your Turn.",
-  CONFUSION: "You have Disadvantage on KNO and STE.",
-  WOUND: "You have Disadvantage on STR and AGL.",
-  FEAR: "You have Disadvantage on WIL and CHA.",
-  FREEZE: "You can't take reactions, and you need to dash to move.",
-  BLIND: "You have Disadvantage on PER and to all rolls to attack or dodge.",
-  SILENCE: "You can't speak, and you can't cast spells.",
-  BURN: "At the beginning of your Turn, take 1 damage.",
-  KO:
-    "You can't act or walk by yourself, you can't use feats or spells, and you automatically fail every roll.",
+  POISON: "On your Turn start, roll VIT. If you fail, take 1D4 dmg",
+  STUN: "On your Turn start, roll VIT. If you fail skip your Turn",
+  CONFUSION: "Disadvantage on KNO and STE",
+  WOUND: "Disadvantage on STR and AGL",
+  FEAR: "Disadvantage on WIL and CHA",
+  FREEZE: "Can't take reactions, and you need to dash to move",
+  BLIND: "Disadvantage on PER, attack, and dodge",
+  SILENCE: "Can't speak, and can't cast spells",
+  BURN: "On your Turn start, take 1 dmg",
+  KO: "Can't act or walk by yourself, can't use feats or spells, auto-fail every roll",
 } as const;
 
 export type Status = keyof typeof statuses;
@@ -120,7 +130,7 @@ export const ranges = {
 
 export type Range = keyof typeof ranges;
 
-export type Item = InvItem | Weapon | Armour;
+export type Item = MiscItem | Weapon | Armour;
 
 export const itemClasses = {
   "item": "item",
@@ -138,7 +148,7 @@ export interface ItemBase {
   slot: number;
 }
 
-export interface InvItem extends ItemBase {
+export interface MiscItem extends ItemBase {
   class: "item";
 }
 
@@ -174,9 +184,18 @@ export const isDmgStr = (v: unknown): boolean => {
     /^\d+[dD](2|3|4|6|8|10|12|20)(?:|\+\d+(|[dD](2|3|4|6|8|10|12|20)))$/.test(v);
 };
 
+// Type: Icon
+export const wpnTypes = {
+  "Melee": "mdi-sword",
+  "Ranged": "mdi-bow-arrow",
+  "Shield": "mdi-shield",
+} as const;
+
+export type WpnType = keyof typeof wpnTypes;
+
 export interface Weapon extends ItemBase {
   class: "weapon";
-  type: "M" | "R" | "S";
+  type: WpnType;
   equipped: boolean;
   tags: WpnTag[];
   range: Range;
@@ -205,9 +224,14 @@ export interface Armour extends ItemBase {
   value: number;
 }
 
-export interface Feat {
+export interface ClassAbilityBase {
+  type: "feat" | "spell";
   name: string;
   text: string;
+}
+
+export interface Feat extends ClassAbilityBase {
+  type: "feat";
 }
 
 export type Duration =
@@ -216,11 +240,14 @@ export type Duration =
   | `${Dice} Rounds`
   | "Until time passes";
 
-export interface Spell extends Feat {
+export interface Spell extends ClassAbilityBase {
+  type: "spell";
   roll: AblShort | "-";
   range: Range;
-  duration: Duration;
+  duration: string;
 }
+
+export type ClassAbility = Feat | Spell;
 
 export interface MaxCur {
   max: number;

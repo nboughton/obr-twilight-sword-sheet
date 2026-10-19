@@ -3,7 +3,8 @@
 ## Install the dependencies
 
 ```bash
-pnpm install
+deno install
+deno task postinstall
 # or: yarn/npm/bun install
 ```
 

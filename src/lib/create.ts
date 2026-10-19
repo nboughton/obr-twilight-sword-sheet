@@ -58,7 +58,7 @@ export const create = {
       case "weapon":
         return {
           ...item,
-          type: "M",
+          type: "Melee",
           equipped: false,
           tags: [],
           range: "Close",
@@ -80,11 +80,13 @@ export const create = {
   },
 
   feat: (): Feat => ({
+    type: "feat",
     name: "",
     text: "",
   }),
 
   spell: (): Spell => ({
+    type: "spell",
     name: "",
     text: "",
     roll: "-",

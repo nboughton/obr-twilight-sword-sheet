@@ -1,0 +1,14 @@
+{
+  "name": "Twilight Sword Sheet",
+  "version": "1.0.0",
+  "manifest_version": 1,
+  "description": "A character sheet for Twilight Sword",
+  "homepage_url": "https://github.com/nboughton/obr-twilight-sword-sheet",
+  "action": {
+    "title": "Twilight Sword Sheet",
+    "icon": "/apps/obr-twilight-sword-sheet/icon.svg",
+    "popover": "/apps/obr-twilight-sword-sheet/",
+    "height": 800,
+    "width": 450
+  }
+}
