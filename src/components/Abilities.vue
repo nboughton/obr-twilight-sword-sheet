@@ -1,16 +1,23 @@
 <template>
   <div class="column">
-    <div class="row items-center justify-end q-mb-sm">
+    <div class="row items-center justify-between q-mb-sm">
       <span class="col" v-if="app.char.feats.length == 0">
         Toggle Edit mode to get started <q-icon name="arrow_right" size="sm"/>
       </span>
+      <q-btn-toggle class="col" v-model="filter" :options="[
+        { label: 'All', value: 'all' },
+        { label: 'Feats', value: 'feat' },
+        { label: 'Spells', value: 'spell'}
+      ]" flat rounded spread dense />
       <q-btn class="col-shrink" v-if="edit" icon="add_circle" flat dense rounded
         @click="addAbility" />
       <q-toggle class="col-shrink" v-model="edit" icon="edit" />
     </div>
 
-    <class-ability v-for="(_, key) in app.char.feats" v-model="app.char.feats[key]!"
-      :key="`abl-${key}`" :edit="edit" @delete="removeAbility(key)" />
+    <div v-for="(feat, key) in app.char.feats" :key="`abl-${key}`">
+      <class-ability v-if="(filter == feat.type) || filter == 'all'" v-model="app.char.feats[key]!"
+        :edit="edit" @delete="removeAbility(key)" />
+    </div>
   </div>
 </template>
 
@@ -25,6 +32,7 @@ import { create } from "@/lib/create.js";
 
 const app = useCharacterStore();
 const edit = ref(false);
+const filter = ref("all");
 
 const $q = useQuasar();
 const addAbility = () =>
