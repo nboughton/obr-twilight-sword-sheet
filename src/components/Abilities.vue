@@ -4,7 +4,7 @@
       <span class="col" v-if="app.char.feats.length == 0">
         Toggle Edit mode to get started <q-icon name="arrow_right" size="sm"/>
       </span>
-      <q-btn-toggle class="col" v-model="filter" :options="[
+      <q-btn-toggle v-else class="col" v-model="filter" :options="[
         { label: 'All', value: 'all' },
         { label: 'Feats', value: 'feat' },
         { label: 'Spells', value: 'spell'}
