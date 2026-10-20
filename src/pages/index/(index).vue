@@ -16,14 +16,14 @@
       <q-tab-panel class="column" name="cond">
         <div class="row justify-between">
           <div class="col-8">
-            <q-list :class="`row rounded-borders q-pa-sm q-mb-xs items-center bg-${item.colour}`"
-              v-for="item in conditions" dense>
-              <q-item dense>
-                <q-item-section avatar>
-                  <q-avatar :icon="item.icon" font-size="2rem"></q-avatar>
-                </q-item-section>
+            <q-list>
+              <q-item :class="`row rounded-borders q-pa-sm q-mb-xs items-center bg-${item.colour}`"
+                v-for="item in conditions" dense>
                 <q-item-section>
                   {{ item.text }}
+                </q-item-section>
+                <q-item-section avatar>
+                  <q-avatar :icon="item.icon" font-size="2rem"></q-avatar>
                 </q-item-section>
               </q-item>
             </q-list>

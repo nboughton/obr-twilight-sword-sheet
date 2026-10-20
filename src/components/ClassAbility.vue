@@ -4,7 +4,7 @@
       <q-input class="col" label="Name" v-model="feat.name" dense />
       <q-select class="col-2" v-if="feat.type == 'spell'" label="Roll"
         :options="Object.keys(attributes)" v-model="feat.roll" dense />
-      <q-select class="col-2" label="Per rest" v-model="feat.per"
+      <q-select class="col-3" label="Per rest" v-model="feat.per"
         :options="['-', ...Object.keys(rests)]" dense />
     </div>
 
