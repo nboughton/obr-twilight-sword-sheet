@@ -1,63 +1,47 @@
 <template>
-  <q-btn-group class="column full-width" vertical rounded flat>
-    <q-btn-group :class="`${disadvantage(short(name)) ? 'bg-red text-white' : ''} q-my-xs `"
-      v-for="(val, name) in app.char.abilities" :key="name" rounded spread>
-      <q-btn :label="short(name)" disable />
-      <q-btn :label="val" @click="edit(name)" />
-    </q-btn-group>
-  </q-btn-group>
+  <div class="column">
+    <div class="row items-center justify-end q-mb-sm">
+      <span class="col" v-if="app.char.feats.length == 0">
+        Toggle Edit mode to get started <q-icon name="arrow_right" size="sm"/>
+      </span>
+      <q-btn class="col-shrink" v-if="edit" icon="add_circle" flat dense rounded
+        @click="addAbility" />
+      <q-toggle class="col-shrink" v-model="edit" icon="edit" />
+    </div>
+
+    <class-ability v-for="(_, key) in app.char.feats" v-model="app.char.feats[key]!"
+      :key="`abl-${key}`" :edit="edit" @delete="removeAbility(key)" />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from "quasar";
-import { abilities, AblLong, AblShort } from "./models";
+import { ref } from "vue";
 
+import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
-import { short } from "@/lib/misc";
+
+import ClassAbility from "./ClassAbility.vue";
+import { create } from "@/lib/create.js";
 
 const app = useCharacterStore();
-
-const disadvantage = (abl: AblShort): boolean => {
-  if (app.armour?.penalty.includes(abl)) return true;
-
-  switch (abl) {
-    case "STR":
-      if (app.char.statuses.WOUND) return true;
-      break;
-    case "AGL":
-      if (app.char.statuses.WOUND) return true;
-      break;
-    case "PER":
-      if (app.char.statuses.BLIND) return true;
-      break;
-    case "WIL":
-      if (app.char.statuses.FEAR) return true;
-      break;
-    case "KNO":
-      if (app.char.statuses.CONFUSION) return true;
-      break;
-    case "CHA":
-      if (app.char.statuses.FEAR) return true;
-      break;
-    case "STE":
-      if (app.char.statuses.CONFUSION) return true;
-      break;
-  }
-  return false;
-};
+const edit = ref(false);
 
 const $q = useQuasar();
-const edit = (name: AblLong) =>
+const addAbility = () =>
   $q.dialog({
-    title: `Edit ${name}`,
-    cancel: true,
+    title: "New Feat or Spell",
     ok: true,
-    prompt: {
-      label: "Value",
-      model: `${app.char.abilities[name]}`,
-      type: "number",
-      min: 0,
-      max: 10,
+    cancel: true,
+    options: {
+      items: ["feat", "spell"].map((i) => ({ label: i, value: i })),
+      type: "radio",
+      model: "feat",
     },
-  }).onOk((v) => app.char.abilities[name] = v);
+  }).onOk((v) => app.char.feats.push(v == "feat" ? create.feat() : create.spell()));
+const removeAbility = (index: number) =>
+  $q.dialog({
+    title: `Remove ${app.char.feats[index]?.name}?`,
+    ok: true,
+    cancel: true,
+  }).onOk(() => app.char.feats.splice(index, 1));
 </script>

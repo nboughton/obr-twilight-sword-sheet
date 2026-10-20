@@ -1,17 +1,29 @@
 <template>
   <div class="column">
+    <div class="row items-center justify-between q-mb-sm">
+      <q-btn class="col-3" icon="mdi-hexagon-slice-6" color="green" :label="app.char.zin.green"
+        rounded outline @click="editZin('green')" />
+      <q-btn class="col-3" icon="mdi-hexagon-slice-6" color="blue" :label="app.char.zin.blue"
+        rounded outline @click="editZin('blue')" />
+      <q-btn class="col-3" icon="mdi-hexagon-slice-6" color="red" :label="app.char.zin.red"
+        rounded outline @click="editZin('red')" />
+    </div>
     <div class="row items-center q-mb-sm">
-      <span class="col-grow text-bold">
-        Backpack {{ encTotal }}/{{ app.char.abilities.Strength * 2 }}
-        | equipped {{ app.char.inventory.filter((i) => i.class == "weapon" && i.equipped).length }} Weapon(s)
+      <span class="col text-bold">
+        Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}
+        | equipped {{ equippedWeapons }} Weapon(s)
         | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }} Armour
       </span>
-      <q-btn class="col-shrink" icon="add_circle" v-if="edit" @click="addItem" rounded dense flat />
-      <q-toggle class="col-shrink" v-model="edit" icon="edit" dense />
+      <q-btn class="col-shrink q-mr-xs" icon="mdi-cog" v-if="edit" @click="invConf" rounded dense
+        flat />
+      <q-btn class="col-shrink q-mr-xs" icon="add_circle" v-if="edit" @click="addItem" rounded dense
+        flat />
+      <q-toggle class="col-shrink" v-model="edit" icon="edit" />
     </div>
 
     <q-btn-toggle class="row q-mb-sm" v-model="filter" :options="[
        {label: 'All', value: 'all'},
+       {label: 'Items', value: 'item'},
        {label: 'Weapons', value: 'weapon'},
        {label: 'Armour', value: 'armour'}
     ]" flat rounded spread dense />
@@ -46,6 +58,23 @@ const encTotal = computed((): number => {
   return total;
 });
 
+const equippedWeapons = computed((): number => {
+  let total = 0;
+  let small = 0;
+  let heavy = 0;
+  for (let item of app.char.inventory.filter((i) => i.class == "weapon")) {
+    if (item.equipped) {
+      if (item.tags.includes("SMALL")) small++;
+      else if (item.tags.includes("HEAVY")) heavy++;
+      else total++;
+    }
+  }
+
+  total += Math.floor(small / 2) + small % 2;
+  total += heavy * 2;
+  return total;
+});
+
 const $q = useQuasar();
 const addItem = () =>
   $q.dialog({
@@ -57,7 +86,7 @@ const addItem = () =>
       type: "radio",
       model: "item",
     },
-  }).onOk((v) => app.char.inventory.push(create.item(v)));
+  }).onOk((v) => app.char.inventory.unshift(create.item(v)));
 
 const removeItem = (index: number) =>
   $q.dialog({
@@ -65,4 +94,26 @@ const removeItem = (index: number) =>
     ok: true,
     cancel: true,
   }).onOk(() => app.char.inventory.splice(index, 1));
+
+const invConf = () =>
+  $q.dialog({
+    title: "Extra Slots",
+    ok: true,
+    cancel: true,
+    prompt: {
+      model: `${app.char.invMod}`,
+      type: "number",
+    },
+  }).onOk((v) => app.char.invMod = +v);
+
+const editZin = (colour: "green" | "blue" | "red") =>
+  $q.dialog({
+    title: `${colour} zin`,
+    ok: true,
+    cancel: true,
+    prompt: {
+      type: "number",
+      model: `${app.char.zin[colour]}`,
+    },
+  }).onOk((v) => app.char.zin[colour] = +v);
 </script>

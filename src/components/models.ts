@@ -66,7 +66,7 @@ export interface Character {
   hearts: MaxCur;
   stamina: MaxCur;
 
-  abilities: Record<AblLong, number>;
+  attributes: Record<AttrLong, number>;
   statuses: Record<Status, boolean>;
 
   zin: {
@@ -76,10 +76,11 @@ export interface Character {
   };
 
   inventory: Item[];
+  invMod: number;
   feats: ClassAbility[];
 }
 
-export const abilities = {
+export const attributes = {
   STR: "Strength",
   AGL: "Agility",
   VIT: "Vitality",
@@ -90,8 +91,8 @@ export const abilities = {
   STE: "Stealth",
 } as const;
 
-export type AblShort = keyof typeof abilities;
-export type AblLong = (typeof abilities)[keyof typeof abilities];
+export type AttrShort = keyof typeof attributes;
+export type AttrLong = (typeof attributes)[keyof typeof attributes];
 
 export const statuses = {
   POISON: "On your Turn start, roll VIT. If you fail, take 1D4 dmg",
@@ -109,16 +110,16 @@ export const statuses = {
 export type Status = keyof typeof statuses;
 
 export const StatusIcon: Record<Status, { icon: string; colour: string }> = {
-  POISON: { icon: "mdi-chart-bubble", colour: "green-9" },
-  STUN: { icon: "mdi-flash", colour: "yellow-9" },
-  CONFUSION: { icon: "mdi-head-question", colour: "blue-9" },
-  WOUND: { icon: "mdi-liquid-spot", colour: "red" },
-  FEAR: { icon: "mdi-head-alert", colour: "purple-5" },
-  FREEZE: { icon: "mdi-snowflake", colour: "blue-5" },
-  BLIND: { icon: "mdi-eye-off", colour: "green-5" },
-  SILENCE: { icon: "mdi-chat-processing", colour: "pink" },
-  BURN: { icon: "mdi-fire", colour: "orange" },
-  KO: { icon: "mdi-skull", colour: "purple-9" },
+  POISON: { icon: "mdi-chart-bubble", colour: "green-4" },
+  STUN: { icon: "mdi-flash", colour: "yellow-4" },
+  CONFUSION: { icon: "mdi-head-question", colour: "blue-4" },
+  WOUND: { icon: "mdi-liquid-spot", colour: "red-4" },
+  FEAR: { icon: "mdi-head-alert", colour: "purple-3" },
+  FREEZE: { icon: "mdi-snowflake", colour: "blue-3" },
+  BLIND: { icon: "mdi-eye-off", colour: "green-3" },
+  SILENCE: { icon: "mdi-chat-processing", colour: "pink-3" },
+  BURN: { icon: "mdi-fire", colour: "orange-4" },
+  KO: { icon: "mdi-skull", colour: "purple-4" },
 } as const;
 
 export const ranges = {
@@ -144,6 +145,7 @@ export interface ItemBase {
   id: string;
   name: string;
   class: ItemClass;
+  attuned?: boolean;
   desc: string;
   slot: number;
 }
@@ -216,7 +218,7 @@ export type ArmourType = keyof typeof armourTypes;
 export interface Armour extends ItemBase {
   class: "armour";
   type: ArmourType;
-  penalty: AblShort[];
+  penalty: AttrShort[];
   equipped: boolean;
   // Can probably just put these in the .desc field
   // resist: (Element | "HOT 1" | "HOT 2" | "COLD 1" | "COLD 2")[];
@@ -224,8 +226,17 @@ export interface Armour extends ItemBase {
   value: number;
 }
 
+export const rests = {
+  "Short": "Short",
+  "Long": "Long",
+} as const;
+
+export type Rest = keyof typeof rests | "-";
+
 export interface ClassAbilityBase {
   type: "feat" | "spell";
+  per: Rest;
+  expended?: boolean;
   name: string;
   text: string;
 }
@@ -242,7 +253,7 @@ export type Duration =
 
 export interface Spell extends ClassAbilityBase {
   type: "spell";
-  roll: AblShort | "-";
+  roll: AttrShort | "-";
   range: Range;
   duration: string;
 }

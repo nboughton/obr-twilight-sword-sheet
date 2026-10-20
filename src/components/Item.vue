@@ -3,7 +3,7 @@
     <div class="row justify-evenly full-width items-baseline ">
       <q-input class="col" v-model="item.name" label="Name" dense />
 
-      <q-input class="col-2" v-if="item.class == 'weapon'"
+      <q-input class="col-2" v-if="item.class == 'weapon' && app.config.durability"
         type="number" v-model.number="item.durability" label="Durability" dense />
 
       <q-select class="col" v-if="item.class == 'weapon'" v-model="item.type"
@@ -13,6 +13,9 @@
         :options="Object.keys(ranges)" label="Range" dense />
 
       <q-input class="col-1" v-model.number="item.slot" label="Slots" dense />
+
+      <q-checkbox class="col-shrink" v-if="item.class == 'weapon' || item.class == 'armour'"
+        v-model="item.equipped" label="Equip" dense left-label />
     </div>
 
     <div class="row items-center">
@@ -23,13 +26,10 @@
         :options="Object.keys(wpnTags)" label="Tags" multiple dense use-chips />
 
       <q-select class="col" v-if="item.class == 'armour'" v-model="item.penalty"
-        :options="Object.keys(abilities)" label="Penalties" multiple dense use-chips />
+        :options="Object.keys(attributes)" label="Penalties" multiple dense use-chips />
 
       <q-input class="col-1" v-if="item.class == 'armour'" type="number" v-model.number="item.value"
         label="Value" dense />
-
-      <q-checkbox class="col-shrink" v-if="item.class == 'weapon' || item.class == 'armour'"
-        v-model="item.equipped" label="Equip" dense left-label />
     </div>
 
     <div class="row">
@@ -40,8 +40,8 @@
         :rules="[val => isDmgStr(val) || 'Examples: 1d10, 1d8+1, 3d4+2d6']" />
     </div>
 
-    <div class="row">
-      <q-input class="col" v-model="item.desc" label="Desc" dense borderless />
+    <div class="row iems-center">
+      <q-input class="col" v-model="item.desc" label="Additional info" dense borderless autogrow />
       <q-btn class="col-shrink" icon="delete" flat rounded dense @click="emit('delete')" />
     </div>
   </div>
@@ -52,7 +52,7 @@
         <div class="row items-center">
           <q-icon v-if="item.class == 'weapon'" :name="wpnTypes[item.type]" size="sm" />
           <q-btn v-if="item.class == 'armour'" icon="mdi-shield" size="md" disable flat dense>{{ item.value }}</q-btn>
-          {{ item.name }}{{ item.class == "weapon" ? ` [${item.durability}]` : "" }}
+          {{ item.name }}{{ item.class == "weapon" && app.config.durability ? ` [${item.durability}]` : "" }}
 
           {{ (item.class == "weapon" || item.class == "armour") && item.equipped ? "(equipped)" : "" }}
           <span v-if="item.class == 'weapon'">&nbsp;({{ item.damage }})</span>
@@ -80,10 +80,9 @@
 </template>
 
 <script setup lang="ts">
-import { useQuasar } from "quasar";
 import {
-  abilities,
   armourTypes,
+  attributes,
   elements,
   elIcon,
   isDmgStr,
@@ -94,9 +93,14 @@ import {
   wpnTypes,
 } from "./models";
 
+import { useQuasar } from "quasar";
+import { useCharacterStore } from "@/stores/character-store";
+
 const item = defineModel<Item>({ required: true });
 const props = defineProps<{ edit: boolean }>();
 const emit = defineEmits(["delete"]);
+
+const app = useCharacterStore();
 
 const $q = useQuasar();
 const showTagText = (tag: WpnTag) =>

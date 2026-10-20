@@ -1,5 +1,8 @@
 <template>
   <div class="row q-mb-sm q-px-sm full-width justify-between">
+    <attributes />
+  </div>
+  <div class="row q-mb-sm q-px-sm full-width justify-between">
     <q-btn-group class="bg-grey-3 text-black" rounded outline>
       <q-btn :label="app.char.hearts.max" @click="editValue('hearts', 'max')" />
       <q-separator vertical />
@@ -25,7 +28,7 @@
       <q-separator vertical />
       <q-btn disable>
         <svg-icon colour-empty="grey" colour-filled="blue"
-          :path="mdiArmFlex"
+          :path="mdiRhombus"
           :fill-pc="app.char.stamina.cur / app.char.stamina.max" />
       </q-btn>
       <q-separator vertical />
@@ -39,12 +42,13 @@
 import { computed } from "vue";
 
 import { Armour } from "./models.js";
-import { mdiArmFlex, mdiHeart, mdiShield } from "@mdi/js";
+import { mdiHeart, mdiRhombus, mdiShield } from "@mdi/js";
 
 import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
 
 import SvgIcon from "./SvgIcon.vue";
+import Attributes from "./Attributes.vue";
 
 const app = useCharacterStore();
 

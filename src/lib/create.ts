@@ -14,7 +14,7 @@ export const create = {
     hope: 1,
     hearts: { max: 0, cur: 0 },
     stamina: { max: 3, cur: 3 },
-    abilities: {
+    attributes: {
       Strength: 0,
       Agility: 0,
       Vitality: 0,
@@ -42,6 +42,7 @@ export const create = {
       red: 0,
     },
     inventory: [],
+    invMod: 0,
     feats: [],
   }),
 
@@ -81,16 +82,20 @@ export const create = {
 
   feat: (): Feat => ({
     type: "feat",
+    per: "-",
+    expended: false,
     name: "",
     text: "",
   }),
 
   spell: (): Spell => ({
     type: "spell",
+    per: "Long",
     name: "",
     text: "",
     roll: "-",
     range: "Self",
     duration: "Instant",
+    expended: false,
   }),
 };

@@ -1,11 +1,11 @@
 <template>
   <div v-if="edit" class="column bg-grey-3 rounded-borders q-mb-sm q-pa-sm">
-    <div class="row">
-      <q-input class="col-grow" label="Name" v-model="feat.name" dense />
+    <div class="row items-center">
+      <q-input class="col" label="Name" v-model="feat.name" dense />
       <q-select class="col-2" v-if="feat.type == 'spell'" label="Roll"
-        :options="Object.keys(abilities)" v-model="feat.roll" dense />
-      <q-btn class="col-shrink" v-if="edit" icon="delete" flat dense rounded
-        @click="emit('delete')" />
+        :options="Object.keys(attributes)" v-model="feat.roll" dense />
+      <q-select class="col-2" label="Per rest" v-model="feat.per"
+        :options="['-', ...Object.keys(rests)]" dense />
     </div>
 
     <div class="row" v-if="feat.type == 'spell'">
@@ -14,14 +14,24 @@
       <q-input class="col" label="Duration" v-model="feat.duration" dense />
     </div>
 
-    <q-input class="row" label="Text" v-model="feat.text" dense borderless />
+    <div class="row items-center">
+      <q-input class="col" label="Text" v-model="feat.text" dense borderless autogrow />
+      <q-btn class="col-shrink" v-if="edit" icon="delete" flat dense rounded
+        @click="emit('delete')" />
+    </div>
   </div>
 
   <div v-else class="column bg-grey-3 rounded-borders  q-mb-sm q-pa-sm">
     <div class="row">
       <span class="col text-bold">{{ feat.name }}</span>
-      <span class="col-shrink"
-        v-if="feat.type == 'spell'">Roll {{ feat.roll }} ({{ feat.roll != "-" ? app.char.abilities[long(feat.roll)] : "-" }})</span>
+      <span class="col-shrink" v-if="feat.type == 'spell'">
+        Roll {{ feat.roll }} ({{ feat.roll != "-" ? app.char.attributes[long(feat.roll)] : "-" }})
+      </span>
+      <q-checkbox class="col-shrink" v-if="feat.per != '-'" v-model="feat.expended"
+        dense unchecked-icon="mdi-checkbox-blank-circle-outline"
+        checked-icon="mdi-checkbox-marked-circle">
+        <q-tooltip>Expended</q-tooltip>
+      </q-checkbox>
     </div>
     <div class="row items-center" v-if="feat.type == 'spell'">
       <span class="col items-center">
@@ -39,7 +49,7 @@
 
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores/character-store";
-import { abilities, type ClassAbility, ranges } from "./models";
+import { attributes, type ClassAbility, ranges, rests } from "./models";
 import { long } from "@/lib/misc";
 
 const feat = defineModel<ClassAbility>({ required: true });
