@@ -20,7 +20,7 @@
               v-for="item in conditions" dense>
               <q-item dense>
                 <q-item-section avatar>
-                  <q-avatar :icon="item.icon"></q-avatar>
+                  <q-avatar :icon="item.icon" font-size="2rem"></q-avatar>
                 </q-item-section>
                 <q-item-section>
                   {{ item.text }}
