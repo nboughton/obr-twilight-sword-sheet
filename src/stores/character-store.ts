@@ -1,5 +1,5 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { Armour, Character, CharacterStore, Dice } from "../components/models.ts";
+import { Armour, Character, CharacterStore, Dice, Status, statuses } from "../components/models.ts";
 import { create } from "../lib/create.ts";
 import { exportFile, Notify } from "quasar";
 import { sum } from "../lib/misc.ts";
@@ -55,6 +55,9 @@ export const useCharacterStore = defineStore("character", {
         this.char[v as "hearts" | "stamina"].cur = max;
       }
       this.char.feats.filter((a) => a.per == "Long").forEach((b) => b.expended = false);
+    },
+    clearStatusEffects() {
+      for (const s of Object.keys(statuses)) this.char.statuses[s as Status] = false;
     },
 
     exportData() {

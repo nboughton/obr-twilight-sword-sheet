@@ -10,10 +10,13 @@
     </div>
     <div class="row items-center q-mb-sm">
       <div class="col text-bold">
-        <div
-          class="row">Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}</div>
-        <div class="row">Equipped {{ equippedWeapons }}/3 Weapon(s)
-        | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }}/1 Armour</div>
+        <div class="row">
+          Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}
+        </div>
+        <div class="row">
+          Equipped {{ equippedWeapons }}/3 Weapon(s)
+          | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }}/1 Armour
+        </div>
       </div>
       <q-btn class="col-shrink q-mr-xs" icon="mdi-cog" v-if="edit" @click="invConf" rounded dense
         flat />
@@ -80,7 +83,6 @@ const $q = useQuasar();
 const addItem = () =>
   $q.dialog({
     title: "New Item Type".toUpperCase(),
-    ok: true,
     cancel: true,
     options: {
       items: Object.keys(itemClasses).map((v) => ({ label: v, value: v })),
@@ -92,14 +94,12 @@ const addItem = () =>
 const removeItem = (index: number) =>
   $q.dialog({
     title: `Delete ${app.char.inventory[index]?.name}?`.toUpperCase(),
-    ok: true,
     cancel: true,
   }).onOk(() => app.char.inventory.splice(index, 1));
 
 const invConf = () =>
   $q.dialog({
     title: "Extra Slots".toUpperCase(),
-    ok: true,
     cancel: true,
     prompt: {
       model: `${app.char.invMod}`,
@@ -110,7 +110,6 @@ const invConf = () =>
 const editZin = (colour: "green" | "blue" | "red") =>
   $q.dialog({
     title: `${colour} zin`.toUpperCase(),
-    ok: true,
     cancel: true,
     prompt: {
       type: "number",

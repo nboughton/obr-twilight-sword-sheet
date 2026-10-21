@@ -124,7 +124,8 @@
           </div>
           <div v-else>
             <q-btn-group vertical flat spread>
-              <q-btn label="Recover all Hearts/Stamina" no-caps @click="app.fullRecover()" />
+              <q-btn label="Recover all Hearts/Stamina/Spells" no-caps @click="app.fullRecover" />
+              <q-btn label="Clear all Status Effects" no-caps @click="app.clearStatusEffects" />
             </q-btn-group>
           </div>
         </q-card-section>
@@ -166,7 +167,6 @@ const removeChar = (index: number) =>
   $q
     .dialog({
       message: `Delete ${app.characters[index]!.bio.name}?`,
-      cancel: true,
     })
     .onOk(() => {
       app.config.char = 0;

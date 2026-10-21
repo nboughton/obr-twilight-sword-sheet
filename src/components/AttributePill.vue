@@ -22,8 +22,8 @@ const $q = useQuasar();
 const edit = (name: AttrLong) =>
   $q.dialog({
     title: `Edit ${name}`.toUpperCase(),
+
     cancel: true,
-    ok: true,
     prompt: {
       label: "Value",
       model: `${attr.value}`,

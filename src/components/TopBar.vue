@@ -49,9 +49,9 @@ const app = useCharacterStore();
 const $q = useQuasar();
 const editValue = (v: "hearts" | "stamina", m: "max" | "cur") =>
   $q.dialog({
-    title: `Edit ${m == "cur" ? "current" : m} ${v}`.toUpperCase(),
+    title: `${m == "cur" ? "current" : m} ${v}`.toUpperCase(),
+
     cancel: true,
-    ok: true,
     prompt: {
       label: `${v}`,
       model: `${app.char[v][m]}`,

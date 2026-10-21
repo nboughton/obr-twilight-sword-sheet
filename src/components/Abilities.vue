@@ -38,8 +38,8 @@ const $q = useQuasar();
 const addAbility = () =>
   $q.dialog({
     title: "New Feat or Spell",
-    ok: true,
     cancel: true,
+
     options: {
       items: ["feat", "spell"].map((i) => ({ label: i, value: i })),
       type: "radio",
@@ -49,7 +49,6 @@ const addAbility = () =>
 const removeAbility = (index: number) =>
   $q.dialog({
     title: `Remove ${app.char.feats[index]?.name}?`,
-    ok: true,
     cancel: true,
   }).onOk(() => app.char.feats.splice(index, 1));
 </script>
