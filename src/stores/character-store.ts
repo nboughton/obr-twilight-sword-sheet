@@ -1,7 +1,9 @@
 import { acceptHMRUpdate, defineStore } from "pinia";
-import { Armour, Character, CharacterStore } from "../components/models.ts";
+import { Armour, Character, CharacterStore, Dice } from "../components/models.ts";
 import { create } from "../lib/create.ts";
-import { exportFile } from "quasar";
+import { exportFile, Notify } from "quasar";
+import { sum } from "../lib/misc.ts";
+import { roll } from "../lib/dice.ts";
 
 export const useCharacterStore = defineStore("character", {
   state: () => ({
@@ -31,6 +33,28 @@ export const useCharacterStore = defineStore("character", {
         this.characters.splice(index, 1);
         this.config.char = this.characters.length - 1;
       }
+    },
+    recover(t: "hearts" | "stamina", d: Dice) {
+      const n = sum(roll(d));
+      const cur = +this.char[t].cur;
+      const max = +this.char[t].max;
+
+      Notify.create({
+        message: `${(n + cur) <= max ? n : "full"} ${t} recovered`,
+        color: `${t == "hearts" ? "red" : "blue"}`,
+        position: "top",
+      });
+
+      if (cur + n > max) this.char[t].cur = max;
+      else this.char[t].cur = +cur + +n;
+      this.char.feats.filter((a) => a.per == "Short").forEach((b) => b.expended = false);
+    },
+    fullRecover() {
+      for (const v of ["hearts", "stamina"]) {
+        const max = this.char[v as "hearts" | "stamina"].max;
+        this.char[v as "hearts" | "stamina"].cur = max;
+      }
+      this.char.feats.filter((a) => a.per == "Long").forEach((b) => b.expended = false);
     },
 
     exportData() {

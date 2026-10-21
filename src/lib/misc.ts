@@ -8,3 +8,9 @@ export const short = (v: AttrLong): AttrShort => {
 };
 
 export const long = (v: AttrShort): AttrLong => attributes[v];
+
+export const sum = (n: number[]): number => {
+  let t = 0;
+  for (const i of n) t += i;
+  return t;
+};

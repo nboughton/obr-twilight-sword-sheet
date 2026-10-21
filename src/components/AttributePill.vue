@@ -21,7 +21,7 @@ const props = defineProps<{
 const $q = useQuasar();
 const edit = (name: AttrLong) =>
   $q.dialog({
-    title: `Edit ${name}`,
+    title: `Edit ${name}`.toUpperCase(),
     cancel: true,
     ok: true,
     prompt: {

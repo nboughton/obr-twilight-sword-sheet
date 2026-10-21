@@ -79,7 +79,7 @@ const equippedWeapons = computed((): number => {
 const $q = useQuasar();
 const addItem = () =>
   $q.dialog({
-    title: "New Item Type",
+    title: "New Item Type".toUpperCase(),
     ok: true,
     cancel: true,
     options: {
@@ -91,14 +91,14 @@ const addItem = () =>
 
 const removeItem = (index: number) =>
   $q.dialog({
-    title: `Delete ${app.char.inventory[index]?.name}?`,
+    title: `Delete ${app.char.inventory[index]?.name}?`.toUpperCase(),
     ok: true,
     cancel: true,
   }).onOk(() => app.char.inventory.splice(index, 1));
 
 const invConf = () =>
   $q.dialog({
-    title: "Extra Slots",
+    title: "Extra Slots".toUpperCase(),
     ok: true,
     cancel: true,
     prompt: {
@@ -109,7 +109,7 @@ const invConf = () =>
 
 const editZin = (colour: "green" | "blue" | "red") =>
   $q.dialog({
-    title: `${colour} zin`,
+    title: `${colour} zin`.toUpperCase(),
     ok: true,
     cancel: true,
     prompt: {

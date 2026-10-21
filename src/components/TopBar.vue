@@ -3,7 +3,7 @@
     <attributes />
   </div>
   <div class="row q-mb-sm q-px-xs full-width justify-between">
-    <q-btn-group class="col-3 bg-grey-3 text-black" rounded outline spread>
+    <q-btn-group class="col bg-grey-3 text-black" rounded outline spread>
       <q-btn @click="editValue('hearts', 'max')">
         <svg-icon colour-empty="pink" colour-filled="red"
           :path="mdiHeart"
@@ -14,15 +14,15 @@
       <q-btn :label="app.char.hearts.cur" @click="editValue('hearts', 'cur')" />
     </q-btn-group>
 
-    <q-btn-group class="col-3 bg-grey-3 text-black" rounded outline spread>
+    <q-btn-group class="col bg-grey-3 text-black q-mx-sm" rounded outline spread>
       <q-btn disable>
         <svg-icon :path="mdiShield" />
       </q-btn>
       <q-separator vertical />
-      <q-btn disable>{{ armour != 0 ? armour.value : 0 }}</q-btn>
+      <q-btn disable>{{ app.armour?.value ?? 0 }}</q-btn>
     </q-btn-group>
 
-    <q-btn-group class="col-3 bg-grey-3 text-black" rounded outline spread>
+    <q-btn-group class="col bg-grey-3 text-black" rounded outline spread>
       <q-btn @click="editValue('stamina', 'max')">
         <svg-icon colour-empty="lightblue" colour-filled="blue"
           :path="mdiRhombus"
@@ -36,9 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue";
-
-import { Armour } from "./models.js";
 import { mdiHeart, mdiRhombus, mdiShield } from "@mdi/js";
 
 import { useQuasar } from "quasar";
@@ -49,16 +46,10 @@ import Attributes from "./Attributes.vue";
 
 const app = useCharacterStore();
 
-const armour = computed(() =>
-  app.char.inventory.filter((i) => i.class == "armour").find((i) => (i as Armour).equipped) as
-    | Armour
-    | undefined ?? 0
-);
-
 const $q = useQuasar();
 const editValue = (v: "hearts" | "stamina", m: "max" | "cur") =>
   $q.dialog({
-    title: `Edit ${m == "cur" ? "current" : m} ${v}`,
+    title: `Edit ${m == "cur" ? "current" : m} ${v}`.toUpperCase(),
     cancel: true,
     ok: true,
     prompt: {

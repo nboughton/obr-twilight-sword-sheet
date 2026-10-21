@@ -13,6 +13,7 @@
 
         <q-toolbar-title> Twilight Sword </q-toolbar-title>
 
+        <q-btn icon="mdi-bed" @click="showRestDialog = true" flat rounded />
         <q-checkbox v-model="app.char.boon" checked-icon="mdi-flare"
           unchecked-icon="mdi-circle-outline" keep-color color="white" size="lg">
           <q-tooltip>Boon</q-tooltip>
@@ -100,17 +101,53 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+    <q-dialog v-model="showRestDialog">
+      <q-card>
+        <q-card-section
+          class="text-center text-bold text-white bg-primary">Take a Rest</q-card-section>
+        <q-card-section class="column">
+          <q-btn-toggle v-model="restType" :options="[
+            {label: 'Short', value: 'short'},
+            {label: 'Long', value: 'long'}
+          ]" flat dense spread rounded />
+          <div v-if="restType == 'short'">
+            <span class="text-bold text-center">Choose 1:</span>
+            <q-btn-group class="bg-grey-3" vertical outline spread>
+              <q-btn label="1D12 Hearts + 1D4 Stamina"
+                @click="app.recover('hearts', '1d12'); app.recover('stamina', '1d4')" no-caps />
+              <q-btn label="2D12 Hearts" @click="app.recover('hearts', '2d12')" no-caps />
+              <q-btn label="2D4 Stamina" @click="app.recover('stamina', '2d4')" no-caps />
+            </q-btn-group>
+            <div class="text-bold text-center">OR clear 1 Status Effect</div>
+            <div class="text-bold text-center">AND recover 1 expended Spell</div>
+          </div>
+          <div v-else>
+            <q-btn-group vertical flat spread>
+              <q-btn label="Recover all Hearts/Stamina" no-caps @click="app.fullRecover()" />
+            </q-btn-group>
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn label="Close" @click="showRestDialog = false" flat />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-layout>
 </template>
 
 <script setup lang="ts">
 import { CharacterStore } from "@/components/models";
+
 import { useCharacterStore } from "@/stores/character-store";
 import { useQuasar } from "quasar";
 import { ref } from "vue";
 
 const app = useCharacterStore();
 const $q = useQuasar();
+
+const showRestDialog = ref(false);
+const restType = ref("short");
 
 const showDataLoad = ref(false);
 const fileToLoad = ref(null);
@@ -130,7 +167,6 @@ const removeChar = (index: number) =>
     .dialog({
       message: `Delete ${app.characters[index]!.bio.name}?`,
       cancel: true,
-      maximized: true,
     })
     .onOk(() => {
       app.config.char = 0;
