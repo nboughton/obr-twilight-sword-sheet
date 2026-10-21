@@ -1,6 +1,6 @@
 <template>
-  <div class="row justify-between">
-    <div class="col-3 q-pa-xs" v-for="(_, name) in app.char.attributes" :key="name">
+  <div class="row full-width justify-between">
+    <div class="col-xs-3 col-md q-pa-xs" v-for="(_, name, i) in app.char.attributes" :key="name">
       <attribute-pill v-model="app.char.attributes[name]" :name="name"
         :disadvantage="disadv(short(name))" />
     </div>

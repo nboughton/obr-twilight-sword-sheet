@@ -3,19 +3,19 @@
     <div class="row justify-evenly full-width items-baseline ">
       <q-input class="col" v-model="item.name" label="Name" dense />
 
-      <q-input class="col-2" v-if="item.class == 'weapon' && app.config.durability"
-        type="number" v-model.number="item.durability" label="Durability" dense />
-
       <q-select class="col" v-if="item.class == 'weapon'" v-model="item.type"
         :options="Object.keys(wpnTypes)" label="Type" dense emit-value map-options />
 
       <q-select class="col" v-if="item.class == 'weapon'" v-model="item.range"
         :options="Object.keys(ranges)" label="Range" dense />
 
-      <q-input class="col-1" v-model.number="item.slot" label="Slots" dense />
+      <q-input class="col-1" type="number" v-model.number="item.slot" label="Slots" dense />
 
       <q-checkbox class="col-shrink" v-if="item.class == 'weapon' || item.class == 'armour'"
-        v-model="item.equipped" label="Equip" dense left-label />
+        v-model="item.equipped" unchecked-icon="mdi-alpha-e-circle-outline"
+        checked-icon="mdi-alpha-e-circle" dense>
+        <q-tooltip>Equip?</q-tooltip>
+      </q-checkbox>
     </div>
 
     <div class="row items-center">
@@ -38,6 +38,10 @@
 
       <q-input class="col" v-if="item.class == 'weapon'" v-model="item.damage" label="Damage" dense
         :rules="[val => isDmgStr(val) || 'Examples: 1d10, 1d8+1, 3d4+2d6']" />
+
+      <q-input class="col-2" v-if="item.class == 'weapon' && app.config.durability"
+        type="number" v-model.number="item.durability" :min="0" :max="12" label="Durability"
+        dense />
     </div>
 
     <div class="row iems-center">
@@ -50,17 +54,26 @@
     <div class="row">
       <span class="col text-bold">
         <div class="row items-center">
-          <q-icon v-if="item.class == 'weapon'" :name="wpnTypes[item.type]" size="sm" />
+          <q-icon class="q-pr-sm" v-if="item.class == 'weapon'" :name="wpnTypes[item.type]" size="sm" />
           <q-btn v-if="item.class == 'armour'" icon="mdi-shield" size="md" disable flat dense>{{ item.value }}</q-btn>
-          {{ item.name }}{{ item.class == "weapon" && app.config.durability ? ` [${item.durability}]` : "" }}
+          {{ item.name }}{{ item.class == "weapon" && app.config.durability ? ` [${item.durability ?? 0}]` : "" }}
 
-          {{ (item.class == "weapon" || item.class == "armour") && item.equipped ? "(equipped)" : "" }}
-          <span v-if="item.class == 'weapon'">&nbsp;({{ item.damage }})</span>
-          <q-icon v-if="item.class == 'weapon' && item.tags.includes('ELEMENTAL')" :name="elIcon[item.element!].icon" size="sm"/>
+          <span class="q-px-sm" v-if="item.class == 'weapon'">{{ item.damage }}</span>
+          <q-icon v-if="item.class == 'weapon' && item.tags.includes('ELEMENTAL')"
+            :name="elIcon[item.element!].icon" :color="elIcon[item.element!].colour" size="sm">
+            <q-tooltip>{{ item.element }}</q-tooltip>
+          </q-icon>
         </div>
       </span>
 
-      <span class="col-shrink text-bold">{{ item.slot }}</span>
+      <span class="col-shrink items-center justify-center text-bold">
+        <q-icon v-if="equipped" name="mdi-alpha-e-circle" size="sm">
+          <q-tooltip>Equipped</q-tooltip>
+        </q-icon>
+        <q-icon v-else :name="`mdi-numeric-${item.slot}-circle`" size="sm">
+          <q-tooltip>Slot(s)</q-tooltip>
+        </q-icon>
+      </span>
     </div>
 
     <div class="row items-center justify-between" v-if="item.class == 'armour'">
@@ -71,6 +84,9 @@
     </div>
 
     <div class="row" v-if="item.class == 'weapon'">
+      <q-chip :label="item.range.toLowerCase()">
+        <q-tooltip>Range</q-tooltip>
+      </q-chip>
       <q-chip v-for="tag in item.tags" :key="tag" :label="tag.toLowerCase()" clickable
         @click="showTagText(tag)" />
     </div>
@@ -95,12 +111,16 @@ import {
 
 import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
+import { computed } from "vue";
 
 const item = defineModel<Item>({ required: true });
 const props = defineProps<{ edit: boolean }>();
 const emit = defineEmits(["delete"]);
 
 const app = useCharacterStore();
+const equipped = computed((): boolean =>
+  (item.value.class == "weapon" || item.value.class == "armour") && item.value.equipped
+);
 
 const $q = useQuasar();
 const showTagText = (tag: WpnTag) =>

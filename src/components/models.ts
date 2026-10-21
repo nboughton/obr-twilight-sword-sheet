@@ -47,10 +47,10 @@ export const elIcon: Record<Element, { icon: string; colour: string }> = {
   Ice: { icon: "mdi-snowflake", colour: "blue" },
   Wind: { icon: "mdi-weather-windy", colour: "green" },
   Earth: { icon: "mdi-grass", colour: "brown" },
-  Thunder: { icon: "mdi-flash", colour: "yellow" },
+  Thunder: { icon: "mdi-flash", colour: "yellow-9" },
   Water: { icon: "mdi-water", colour: "blue" },
-  Darkness: { icon: "mdi-moon-waxing-crescent", colour: "grey" },
-  Light: { icon: "mdi-brightness-7", colour: "yellow" },
+  Darkness: { icon: "mdi-moon-waxing-crescent", colour: "grey-9" },
+  Light: { icon: "mdi-brightness-7", colour: "grey-6" },
 };
 
 export interface Character {

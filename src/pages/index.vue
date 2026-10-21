@@ -13,8 +13,8 @@
 
         <q-toolbar-title> Twilight Sword </q-toolbar-title>
 
-        <q-checkbox v-model="app.char.boon" checked-icon="mdi-star-shooting"
-          unchecked-icon="mdi-star-shooting-outline" keep-color color="white" size="lg">
+        <q-checkbox v-model="app.char.boon" checked-icon="mdi-flare"
+          unchecked-icon="mdi-circle-outline" keep-color color="white" size="lg">
           <q-tooltip>Boon</q-tooltip>
         </q-checkbox>
 

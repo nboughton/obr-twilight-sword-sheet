@@ -1,6 +1,5 @@
 <template>
-  <svg xmlns="http://www.w3.org/2000/svg" :height="height ? height : 24"
-    :width="width ? width : 24">
+  <svg xmlns="http://www.w3.org/2000/svg" :height="height ?? 24" :width="width ?? 24">
     <linearGradient v-if="fillPc" :id="`lg-${id}`" x1="0.5" y1="1" x2="0.5" y2="0">
       <stop offset="0%" :stop-color="colourFilled" />
       <stop :offset="`${percent}%`" :stop-color="colourFilled" />

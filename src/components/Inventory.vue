@@ -9,11 +9,12 @@
         rounded outline @click="editZin('red')" />
     </div>
     <div class="row items-center q-mb-sm">
-      <span class="col text-bold">
-        Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}
-        | equipped {{ equippedWeapons }} Weapon(s)
-        | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }} Armour
-      </span>
+      <div class="col text-bold">
+        <div
+          class="row">Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}</div>
+        <div class="row">Equipped {{ equippedWeapons }}/3 Weapon(s)
+        | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }}/1 Armour</div>
+      </div>
       <q-btn class="col-shrink q-mr-xs" icon="mdi-cog" v-if="edit" @click="invConf" rounded dense
         flat />
       <q-btn class="col-shrink q-mr-xs" icon="add_circle" v-if="edit" @click="addItem" rounded dense
