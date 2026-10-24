@@ -114,10 +114,10 @@
           <div v-if="restType == 'short'">
             <span class="text-bold text-center">Choose 1:</span>
             <q-btn-group class="bg-grey-3" vertical outline spread>
-              <q-btn label="1D12 Hearts + 1D4 Stamina"
-                @click="app.recover('hearts', '1d12'); app.recover('stamina', '1d4')" no-caps />
+              <q-btn label="1D12 Hearts + 2 Stamina"
+                @click="app.recover('hearts', '1d12'); app.recover('stamina', 2)" no-caps />
               <q-btn label="2D12 Hearts" @click="app.recover('hearts', '2d12')" no-caps />
-              <q-btn label="2D4 Stamina" @click="app.recover('stamina', '2d4')" no-caps />
+              <q-btn label="4 Stamina" @click="app.recover('stamina', 4)" no-caps />
             </q-btn-group>
             <div class="text-bold text-center">OR clear 1 Status Effect</div>
             <div class="text-bold text-center">AND recover 1 expended Spell</div>

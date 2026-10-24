@@ -34,10 +34,13 @@ export const useCharacterStore = defineStore("character", {
         this.config.char = this.characters.length - 1;
       }
     },
-    recover(t: "hearts" | "stamina", d: Dice) {
-      const n = sum(roll(d));
+    recover(t: "hearts" | "stamina", d: Dice | number) {
+      let n = 0;
       const cur = +this.char[t].cur;
       const max = +this.char[t].max;
+
+      if (typeof d == "number") n = d;
+      else n = sum(roll(d));
 
       Notify.create({
         message: `${(n + cur) <= max ? n : "full"} ${t} recovered`,

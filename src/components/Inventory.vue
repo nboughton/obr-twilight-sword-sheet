@@ -14,7 +14,7 @@
           Backpack {{ encTotal }}/{{ (app.char.attributes.Strength * 2) + +app.char.invMod }}
         </div>
         <div class="row">
-          Equipped {{ equippedWeapons }}/3 Weapon(s)
+          Equipped {{ equippedItems }}/3
           | {{ app.char.inventory.filter((i) => i.class == "armour" && i.equipped).length }}/1 Armour
         </div>
       </div>
@@ -54,24 +54,21 @@ const edit = ref(false);
 const filter = ref("all");
 
 const encTotal = computed((): number => {
-  let total = 0;
-  for (let i of app.char.inventory) {
-    if (i.class == "item") total += i.slot;
-    else if ((i.class == "weapon" || i.class == "armour") && !i.equipped) total += i.slot;
-  }
-  return total;
+  let t = 0;
+  app.char.inventory.filter((i) => !i.equipped).forEach((i) => t += i.slot);
+  return t;
 });
 
-const equippedWeapons = computed((): number => {
+const equippedItems = computed((): number => {
   let total = 0;
   let small = 0;
   let heavy = 0;
-  for (let item of app.char.inventory.filter((i) => i.class == "weapon")) {
-    if (item.equipped) {
+  for (let item of app.char.inventory.filter((i) => i.class != "armour" && i.equipped)) {
+    if (item.class == "weapon") {
       if (item.tags.includes("SMALL")) small++;
       else if (item.tags.includes("HEAVY")) heavy++;
       else total++;
-    }
+    } else total++;
   }
 
   total += Math.floor(small / 2) + small % 2;

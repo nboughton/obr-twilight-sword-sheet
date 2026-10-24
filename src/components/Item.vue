@@ -11,9 +11,8 @@
 
       <q-input class="col-1" type="number" v-model.number="item.slot" label="Slots" dense />
 
-      <q-checkbox class="col-shrink" v-if="item.class == 'weapon' || item.class == 'armour'"
-        v-model="item.equipped" unchecked-icon="mdi-alpha-e-circle-outline"
-        checked-icon="mdi-alpha-e-circle" dense>
+      <q-checkbox class="col-shrink" v-model="item.equipped"
+        unchecked-icon="mdi-alpha-e-circle-outline" checked-icon="mdi-alpha-e-circle" dense>
         <q-tooltip>Equip?</q-tooltip>
       </q-checkbox>
     </div>
@@ -67,7 +66,7 @@
       </span>
 
       <span class="col-shrink items-center justify-center text-bold">
-        <q-icon v-if="equipped" name="mdi-alpha-e-circle" size="sm">
+        <q-icon v-if="item.equipped" name="mdi-alpha-e-circle" size="sm">
           <q-tooltip>Equipped</q-tooltip>
         </q-icon>
         <q-icon v-else :name="`mdi-numeric-${item.slot}-circle`" size="sm">
@@ -118,9 +117,6 @@ const props = defineProps<{ edit: boolean }>();
 const emit = defineEmits(["delete"]);
 
 const app = useCharacterStore();
-const equipped = computed((): boolean =>
-  (item.value.class == "weapon" || item.value.class == "armour") && item.value.equipped
-);
 
 const $q = useQuasar();
 const showTagText = (tag: WpnTag) =>

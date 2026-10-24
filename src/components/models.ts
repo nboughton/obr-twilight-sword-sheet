@@ -146,6 +146,7 @@ export interface ItemBase {
   name: string;
   class: ItemClass;
   attuned?: boolean;
+  equipped: boolean;
   desc: string;
   slot: number;
 }
@@ -198,7 +199,6 @@ export type WpnType = keyof typeof wpnTypes;
 export interface Weapon extends ItemBase {
   class: "weapon";
   type: WpnType;
-  equipped: boolean;
   tags: WpnTag[];
   range: Range;
   element?: Element;
@@ -219,7 +219,6 @@ export interface Armour extends ItemBase {
   class: "armour";
   type: ArmourType;
   penalty: AttrShort[];
-  equipped: boolean;
   // Can probably just put these in the .desc field
   // resist: (Element | "HOT 1" | "HOT 2" | "COLD 1" | "COLD 2")[];
   // immune: Element[];
