@@ -57,7 +57,7 @@ export const useCharacterStore = defineStore("character", {
         const max = this.char[v as "hearts" | "stamina"].max;
         this.char[v as "hearts" | "stamina"].cur = max;
       }
-      this.char.feats.filter((a) => a.per == "Long").forEach((b) => b.expended = false);
+      this.char.feats.filter((a) => a.expended).forEach((b) => b.expended = false);
     },
     clearStatusEffects() {
       for (const s of Object.keys(statuses)) this.char.statuses[s as Status] = false;
