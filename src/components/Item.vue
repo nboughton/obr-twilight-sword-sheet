@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div v-else class="column bg-grey-3 item-box rounded-borders  q-mb-sm q-pa-sm">
+  <div v-else class="column bg-grey-3 item-box rounded-borders q-mb-sm q-pa-sm">
     <div class="row">
       <span class="col text-bold">
         <div class="row items-center">
@@ -110,7 +110,6 @@ import {
 
 import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
-import { computed } from "vue";
 
 const item = defineModel<Item>({ required: true });
 const props = defineProps<{ edit: boolean }>();

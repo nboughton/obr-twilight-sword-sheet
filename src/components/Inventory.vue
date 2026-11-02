@@ -48,16 +48,15 @@ import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
 
 import Item from "./Item.vue";
+import { sum } from "@/lib/misc";
 
 const app = useCharacterStore();
 const edit = ref(false);
 const filter = ref("all");
 
-const encTotal = computed((): number => {
-  let t = 0;
-  app.char.inventory.filter((i) => !i.equipped).forEach((i) => t += i.slot);
-  return t;
-});
+const encTotal = computed((): number =>
+  sum(app.char.inventory.filter((i) => !i.equipped).map((i) => i.slot))
+);
 
 const equippedItems = computed((): number => {
   let total = 0;

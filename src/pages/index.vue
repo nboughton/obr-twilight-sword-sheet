@@ -14,12 +14,13 @@
         <q-toolbar-title> Twilight Sword </q-toolbar-title>
 
         <q-btn icon="mdi-bed" @click="showRestDialog = true" flat rounded />
-        <q-checkbox v-model="app.char.boon" checked-icon="mdi-flare"
-          unchecked-icon="mdi-circle-outline" keep-color color="white" size="lg">
+        <q-checkbox
+          :class="`${app.char.boon ? 'animated flash slow infinite' : ''}`"
+          v-model="app.char.boon"
+          checked-icon="mdi-flare" unchecked-icon="mdi-circle-outline" keep-color color="white"
+          size="lg">
           <q-tooltip>Boon</q-tooltip>
         </q-checkbox>
-
-        <!--div>Quasar v{{ $q.version }}</div-->
       </q-toolbar>
     </q-header>
 
