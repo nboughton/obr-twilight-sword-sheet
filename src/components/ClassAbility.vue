@@ -21,15 +21,17 @@
     </div>
   </div>
 
-  <div v-else class="column bg-grey-3 rounded-borders  q-mb-sm q-pa-sm">
+  <div v-else
+    :class="`column bg-${feat.type == 'spell' && app.char.statuses['SILENCE'] ? StatusIcon['SILENCE'].colour : 'grey-3'} rounded-borders q-mb-sm q-pa-sm`">
     <div class="row">
       <span class="col text-bold">{{ feat.name }}</span>
       <span class="col-shrink" v-if="feat.type == 'spell'">
         Roll {{ feat.roll }} ({{ feat.roll != "-" ? app.char.attributes[long(feat.roll)] : "-" }})
       </span>
       <q-checkbox class="col-shrink" v-if="feat.per != '-'" v-model="feat.expended"
-        dense unchecked-icon="mdi-checkbox-blank-circle-outline"
-        checked-icon="mdi-checkbox-marked-circle">
+        unchecked-icon="mdi-checkbox-blank-circle-outline"
+        checked-icon="mdi-checkbox-marked-circle"
+        dense left-label>
         <q-tooltip>Expended</q-tooltip>
       </q-checkbox>
     </div>
@@ -49,7 +51,7 @@
 
 <script setup lang="ts">
 import { useCharacterStore } from "@/stores/character-store";
-import { attributes, type ClassAbility, ranges, rests } from "./models";
+import { attributes, type ClassAbility, ranges, rests, StatusIcon } from "./models";
 import { long } from "@/lib/misc";
 
 const feat = defineModel<ClassAbility>({ required: true });
