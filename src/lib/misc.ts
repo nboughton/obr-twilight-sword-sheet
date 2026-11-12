@@ -14,3 +14,5 @@ export const sum = (n: number[]): number => {
   for (const i of n) t += i;
   return t;
 };
+
+export const capitalise = (v: string): string => v.charAt(0).toUpperCase() + v.slice(1);

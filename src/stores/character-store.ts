@@ -21,6 +21,8 @@ export const useCharacterStore = defineStore("character", {
       state.characters[state.config.char]?.inventory.find((i) =>
         i.class == "armour" && i.equipped
       ) as Armour | undefined,
+    hasStatusEffect: (state): boolean =>
+      Object.values(state.characters[state.config.char]!.statuses).includes(true),
   },
 
   actions: {

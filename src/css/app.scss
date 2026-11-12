@@ -3,6 +3,10 @@
   --animate-duration: 2s;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 /* Firefox */
 input[type='number'] {
   appearance: textfield;

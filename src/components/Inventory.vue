@@ -48,7 +48,7 @@ import { useQuasar } from "quasar";
 import { useCharacterStore } from "@/stores/character-store";
 
 import Item from "./Item.vue";
-import { sum } from "@/lib/misc";
+import { capitalise, sum } from "@/lib/misc";
 
 const app = useCharacterStore();
 const edit = ref(false);
@@ -81,7 +81,7 @@ const addItem = () =>
     title: "New Item Type".toUpperCase(),
     cancel: true,
     options: {
-      items: Object.keys(itemClasses).map((v) => ({ label: v, value: v })),
+      items: Object.keys(itemClasses).map((v) => ({ label: capitalise(v), value: v })),
       type: "radio",
       model: "item",
     },

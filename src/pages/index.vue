@@ -83,6 +83,17 @@
       <router-view />
     </q-page-container>
 
+    <q-footer>
+      <q-btn-group flat dense spread>
+        <q-btn v-for="status, name in app.char.statuses"
+          :color="status ? StatusIcon[name].colour : 'white'"
+          @click="app.char.statuses[name] = !app.char.statuses[name]">
+          <q-icon :name="StatusIcon[name].icon" color="black" size="sm" />
+          <q-tooltip>{{ name }}: {{ statuses[name] }}</q-tooltip>
+        </q-btn>
+      </q-btn-group>
+    </q-footer>
+
     <q-dialog v-model="showDataLoad" maximized>
       <q-card>
         <q-card-section
@@ -139,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import { CharacterStore } from "@/components/models";
+import { CharacterStore, Status, statuses, StatusIcon } from "@/components/models";
 
 import { useCharacterStore } from "@/stores/character-store";
 import { useQuasar } from "quasar";
@@ -173,6 +184,12 @@ const removeChar = (index: number) =>
       app.config.char = 0;
       app.characters.splice(index, 1);
     });
+
+const showStatusText = (name: Status) =>
+  $q.dialog({
+    title: name,
+    message: statuses[name],
+  });
 
 const leftDrawerOpen = ref(false);
 

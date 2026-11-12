@@ -14,25 +14,17 @@
 
     <q-tab-panels v-model="tab">
       <q-tab-panel class="column" name="cond">
-        <div class="row justify-between">
-          <div class="col-8">
-            <q-list>
-              <q-item :class="`row rounded-borders q-pa-sm q-mb-xs items-center bg-${item.colour}`"
-                v-for="item in conditions" dense>
-                <q-item-section>
-                  {{ item.text }}
-                </q-item-section>
-                <q-item-section avatar>
-                  <q-avatar :icon="item.icon" font-size="2rem"></q-avatar>
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </div>
-
-          <div class="col q-pl-sm">
-            <status-effects />
-          </div>
-        </div>
+        <q-list>
+          <q-item :class="`row rounded-borders q-pa-sm q-mb-xs items-center bg-${item.colour}`"
+            v-for="item in conditions" dense>
+            <q-item-section>
+              {{ item.text }}
+            </q-item-section>
+            <q-item-section avatar>
+              <q-avatar :icon="item.icon" font-size="2rem"></q-avatar>
+            </q-item-section>
+          </q-item>
+        </q-list>
       </q-tab-panel>
 
       <q-tab-panel name="inv">
@@ -51,7 +43,6 @@ import { computed, ref } from "vue";
 
 import TopBar from "@/components/TopBar.vue";
 import Bio from "@/components/Bio.vue";
-import StatusEffects from "@/components/StatusEffects.vue";
 import Inventory from "@/components/Inventory.vue";
 import Abilities from "@/components/Abilities.vue";
 import { useCharacterStore } from "@/stores/character-store";

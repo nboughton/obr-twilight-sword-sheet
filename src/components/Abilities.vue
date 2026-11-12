@@ -29,6 +29,7 @@ import { useCharacterStore } from "@/stores/character-store";
 
 import ClassAbility from "./ClassAbility.vue";
 import { create } from "@/lib/create.js";
+import { capitalise } from "@/lib/misc.js";
 
 const app = useCharacterStore();
 const edit = ref(false);
@@ -41,7 +42,7 @@ const addAbility = () =>
     cancel: true,
 
     options: {
-      items: ["feat", "spell"].map((i) => ({ label: i, value: i })),
+      items: ["feat", "spell"].map((i) => ({ label: capitalise(i), value: i })),
       type: "radio",
       model: "feat",
     },
